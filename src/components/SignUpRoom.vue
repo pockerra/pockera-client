@@ -3,12 +3,12 @@
     <form>
       <label>
         Name:
-        <input type="text" placeholder="John" />
+        <input type="text" class="pk-input" placeholder="John" />
       </label>
 
       <label>
         Room id :
-        <input type="text" placeholder="roomId" />
+        <input type="text" class="pk-input" placeholder="roomId" />
       </label>
     </form>
   </div>
@@ -27,6 +27,7 @@ export default defineComponent({
 .sign-up-room {
   label {
     display: block;
+    margin-top: 1.5rem;
   }
 }
 </style>

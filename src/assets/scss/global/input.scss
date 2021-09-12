@@ -1,0 +1,16 @@
+@use "../res/rem";
+@use "../res/colors";
+
+.pk-input {
+  display: block;
+  width: 100%;
+  border: 1px solid colors.$alto-gray;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 0.2rem 0;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(colors.$primary,0.2);
+  }
+}

@@ -23,3 +23,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" src="../assets/scss/global.scss" />
+<style lang="scss" scoped>
+.home {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+</style>
