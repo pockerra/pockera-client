@@ -1,0 +1,10 @@
+@use "src/assets/scss/res/typography";
+@use "src/assets/scss/res/colors";
+@import "src/assets/scss/global/reset";
+@import "src/assets/scss/global/font";
+
+body {
+  font-size: 1rem;
+  font-family: typography.$font;
+  color: colors.$base-black;
+}

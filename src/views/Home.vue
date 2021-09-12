@@ -1,20 +1,17 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <SignUpRoom />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import { io } from 'socket.io-client';
+import SignUpRoom from '@/components/SignUpRoom.vue';
 
 export default defineComponent({
   name: 'Home',
-  components: {
-    HelloWorld,
-  },
+  components: { SignUpRoom },
   setup() {
     const socket = io('http://localhost:3001');
 
@@ -24,3 +21,5 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" src="../assets/scss/global.scss" />
