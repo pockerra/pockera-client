@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <SignUpRoom />
+    <SignUpRoom @submit="onSubmit" />
   </div>
 </template>
 
@@ -18,6 +18,14 @@ export default defineComponent({
     onMounted(() => {
       socket.connect();
     });
+
+    const onSubmit = ({ name, roomId }: { name: string; roomId: string }) => {
+      if (name && roomId) {
+        socket.emit('join-room', { name, roomId });
+      }
+    };
+
+    return { onSubmit };
   },
 });
 </script>
