@@ -24,20 +24,21 @@ export default defineComponent({
     const halfSize = computed(() => Math.ceil(usersLength.value / 2));
 
     const topUsers = computed(() => {
-      const users = props.users;
-      if (usersLength.value) return users?.splice(0, halfSize.value);
+      const users = [...props.users];
+      if (usersLength.value) return users?.slice(0, halfSize.value);
       return [];
     });
 
     const bottomUsers = computed(() => {
-      const users = props.users;
-      if (usersLength.value && halfSize.value) return users?.splice(-halfSize.value);
+      const users = [...props.users];
+      if (usersLength.value) return users?.slice(halfSize.value);
       return [];
     });
 
     return {
       topUsers,
       bottomUsers,
+      halfSize,
     };
   },
 });

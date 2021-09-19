@@ -23,7 +23,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .poker-user-list {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 1rem 0;
 }
 </style>

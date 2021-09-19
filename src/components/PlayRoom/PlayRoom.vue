@@ -1,7 +1,7 @@
 <template>
   <div class="play-room">
     <PokerTable class="table" :users="users" />
-    <PokerCardList class="list" />
+    <PokerCardList class="list" @selected="onSelected" />
   </div>
 </template>
 
@@ -20,11 +20,14 @@ export default defineComponent({
     },
     users: {
       type: Array,
-      default: () => ['Milad', 'Amir', 'gholam', 'Pony', 'honda', 'zonda', 'Zony', 'Lombada', 'Sombada'],
+      default: () => [],
     },
   },
   setup() {
-    return {};
+    const onSelected = (card: number) => {
+      alert(card);
+    };
+    return { onSelected };
   },
 });
 </script>

@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <SignUpRoom @submit="onSubmit" />
-    <PlayRoom />
+    <PlayRoom :users="users" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { io } from 'socket.io-client';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
@@ -21,13 +21,17 @@ export default defineComponent({
       socket.connect();
     });
 
+    const users = ref<Array<string>>([]);
+
     const onSubmit = ({ name, roomId }: { name: string; roomId: string }) => {
       if (name && roomId) {
         socket.emit('join-room', { name, roomId });
       }
     };
 
-    return { onSubmit };
+    users.value = ['milad', 'ali'];
+
+    return { onSubmit, users };
   },
 });
 </script>

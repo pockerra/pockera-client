@@ -1,6 +1,6 @@
 <template>
   <div class="poker-card-list">
-    <PokerCard v-for="card in fibonacci" :key="card" :number="card" />
+    <PokerCard v-for="card in fibonacci" @click="onClick(card)" :key="card" :number="card" />
   </div>
 </template>
 
@@ -13,8 +13,12 @@ import PokerCard from '@/components/PlayRoom/PokerCard.vue';
 export default defineComponent({
   name: 'PokerCardList',
   components: { PokerCard },
-  setup() {
-    return { fibonacci };
+  setup(props, { emit }) {
+    const onClick = (number: number) => {
+      emit('selected', number);
+    };
+
+    return { fibonacci, onClick };
   },
 });
 </script>

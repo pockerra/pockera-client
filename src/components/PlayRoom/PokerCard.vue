@@ -1,5 +1,5 @@
 <template>
-  <div class="poker-card">{{ number }}</div>
+  <div class="poker-card" @click="onClick">{{ number }}</div>
 </template>
 
 <script lang="ts">
@@ -13,6 +13,17 @@ export default defineComponent({
       default: 0,
     },
   },
+  setup(props, { emit }) {
+    const onClick = (e: MouseEvent) => {
+      e.preventDefault();
+      emit('click', e);
+    };
+
+    return {
+      onClick,
+    };
+  },
+  emits: ['click'],
 });
 </script>
 
