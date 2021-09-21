@@ -1,6 +1,6 @@
 <template>
   <div class="poker-user-list" v-if="users">
-    <PokerUser v-for="user in users" :key="user">{{ user }}</PokerUser>
+    <PokerUser v-for="user in users" :key="user" :is-top="isTop">{{ user.name }}</PokerUser>
   </div>
 </template>
 
@@ -15,6 +15,10 @@ export default defineComponent({
     users: {
       type: Array,
       default: () => [],
+    },
+    isTop: {
+      type: Boolean,
+      default: false,
     },
   },
 });

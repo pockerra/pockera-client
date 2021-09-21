@@ -1,5 +1,5 @@
 <template>
-  <div class="poker-user">
+  <div class="poker-user" :class="{ isTop }">
     <slot>{{ name }}</slot>
   </div>
 </template>
@@ -13,6 +13,10 @@ export default defineComponent({
     name: {
       type: String,
       default: '',
+    },
+    isTop: {
+      type: Boolean,
+      default: false,
     },
   },
 });

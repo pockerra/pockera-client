@@ -21,7 +21,7 @@ export default defineComponent({
       socket.connect();
     });
 
-    const users = ref<Array<string>>([]);
+    const users = ref<Array<{ name: string; card?: number }>>([]);
 
     const onSubmit = ({ name, roomId }: { name: string; roomId: string }) => {
       if (name && roomId) {
@@ -29,7 +29,7 @@ export default defineComponent({
       }
     };
 
-    users.value = ['milad', 'ali'];
+    users.value = [{ name: 'milad' }, { name: 'ali', card: 0 }];
 
     return { onSubmit, users };
   },
