@@ -1,8 +1,8 @@
 <template>
   <div class="poker-table">
-    <PokerUserList :users="topUsers" />
+    <PokerUserList :hidden="hidden" :users="topUsers" is-top />
     <div class="table"></div>
-    <PokerUserList :users="bottomUsers" />
+    <PokerUserList :hidden="hidden" :users="bottomUsers" />
   </div>
 </template>
 
@@ -17,6 +17,10 @@ export default defineComponent({
     users: {
       type: Array,
       default: () => [],
+    },
+    hidden: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props) {

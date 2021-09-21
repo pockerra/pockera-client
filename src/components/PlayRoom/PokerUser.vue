@@ -1,6 +1,11 @@
 <template>
-  <div class="poker-user" :class="{ isTop }">
-    <slot>{{ name }}</slot>
+  <div class="poker-user" :class="{ 'is-top': isTop }">
+    <span>
+      <slot>{{ name }}</slot>
+    </span>
+    <div class="card">
+      <slot name="card" />
+    </div>
   </div>
 </template>
 
@@ -24,13 +29,35 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @use '~@/assets/scss/res/colors.scss';
+@use '~@/assets/scss/res/rem.scss';
 .poker-user {
   background: colors.$alto-gray;
   border-radius: 10px;
   width: 6rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   padding: 1rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
+  }
+
+  .card {
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: rem.rem-calc(30px);
+  }
+
+  &.is-top .card {
+    bottom: auto;
+    top: 100%;
+    margin-bottom: 0;
+    margin-top: rem.rem-calc(30px);
+  }
 }
 </style>

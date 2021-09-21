@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <SignUpRoom @submit="onSubmit" />
-    <PlayRoom :users="users" />
+    <SignUpRoom @submit="onSubmit" v-if="!joined" />
+    <PlayRoom :hidden="hidden" :users="users" />
   </div>
 </template>
 
@@ -22,6 +22,8 @@ export default defineComponent({
     });
 
     const users = ref<Array<{ name: string; card?: number }>>([]);
+    const hidden = ref<boolean>(false);
+    const joined = ref<boolean>(true);
 
     const onSubmit = ({ name, roomId }: { name: string; roomId: string }) => {
       if (name && roomId) {
@@ -29,9 +31,14 @@ export default defineComponent({
       }
     };
 
-    users.value = [{ name: 'milad' }, { name: 'ali', card: 0 }];
+    users.value = [
+      { name: 'milad', card: 5 },
+      { name: 'ali', card: 7 },
+    ];
 
-    return { onSubmit, users };
+    hidden.value = false;
+
+    return { onSubmit, users, hidden, joined };
   },
 });
 </script>

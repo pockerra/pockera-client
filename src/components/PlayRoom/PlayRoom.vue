@@ -1,6 +1,6 @@
 <template>
   <div class="play-room">
-    <PokerTable class="table" :users="users" />
+    <PokerTable :hidden="hidden" class="table" :users="users" />
     <PokerCardList class="list" @selected="onSelected" />
   </div>
 </template>
@@ -21,6 +21,10 @@ export default defineComponent({
     users: {
       type: Array,
       default: () => [],
+    },
+    hidden: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
