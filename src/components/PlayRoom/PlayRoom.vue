@@ -27,12 +27,13 @@ export default defineComponent({
       default: false,
     },
   },
-  setup() {
+  setup(props, { emit }) {
     const onSelected = (card: number) => {
-      alert(card);
+      emit('select-card', card);
     };
     return { onSelected };
   },
+  emits: ['select-card'],
 });
 </script>
 

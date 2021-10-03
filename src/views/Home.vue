@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <SignUpRoom @submit="onSubmit" v-if="!joined" />
-    <PlayRoom :hidden="hidden" :users="users" />
+    <PlayRoom @select-card="selectCard" v-else :hidden="hidden" :users="users" />
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { io } from 'socket.io-client';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
+import { Card, Room, User, UserId } from '@/types/user';
 
 export default defineComponent({
   name: 'Home',
@@ -17,28 +18,50 @@ export default defineComponent({
   setup() {
     const socket = io('http://localhost:3001');
 
-    onMounted(() => {
-      socket.connect();
-    });
-
-    const users = ref<Array<{ name: string; card?: number }>>([]);
+    const users = ref<Array<User>>([]);
+    const currentUser = ref('');
     const hidden = ref<boolean>(false);
-    const joined = ref<boolean>(true);
+    const joined = ref<boolean>(false);
+    const room = ref<string>('123');
 
-    const onSubmit = ({ name, roomId }: { name: string; roomId: string }) => {
-      if (name && roomId) {
-        socket.emit('join-room', { name, roomId });
+    const onSubmit = async ({ name }: { name: string }) => {
+      if (name) {
+        await socket.emit('join-room', { name, roomId: room.value });
+        currentUser.value = name;
+        joined.value = true;
       }
     };
 
-    users.value = [
-      { name: 'milad', card: 5 },
-      { name: 'ali', card: 7 },
-    ];
+    const selectCard = (card: number) => {
+      socket.emit('select-card', {
+        card,
+        room: room.value,
+        userId: socket.id,
+      });
+    };
 
     hidden.value = false;
 
-    return { onSubmit, users, hidden, joined };
+    onMounted(async () => {
+      await socket.connect();
+
+      socket.on(
+        'selected-card',
+        ({ usersInRoom }: { data: { card: Card; room: Room; userId: UserId }; usersInRoom: Array<User> }) => {
+          users.value = usersInRoom;
+        }
+      );
+
+      socket.on('user-joined', ({ usersInRoom }) => {
+        users.value = usersInRoom;
+      });
+
+      socket.on('user-left', ({ usersInRoom }) => {
+        users.value = usersInRoom;
+      });
+    });
+
+    return { onSubmit, users, hidden, joined, selectCard };
   },
 });
 </script>
