@@ -1,0 +1,58 @@
+@use "../../../assets/scss/res/colors";
+@use "../../../assets/scss/res/rem";
+
+.pk-button {
+  height: rem.rem-calc(42);
+  padding: 0 rem.rem-calc(24);
+  border: none;
+  background-color: transparent;
+  border-radius: 150px;
+  font-size: rem.rem-calc(16);
+  line-height: rem.rem-calc(16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: colors.$alto-gray;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(colors.$primary,0.3);
+  }
+
+  &.pk-btn-block {
+    display: flex;
+    width: 100%;
+  }
+
+  &.pk-btn-muted {
+    background-color: colors.$primary-bg;
+    color: colors.$primary;
+
+    &:hover {
+      background-color: darken(colors.$primary-bg, 2);
+    }
+  }
+
+  &.pk-btn-primary {
+    background-color: colors.$primary;
+    color: colors.$white;
+
+    &:hover {
+      background-color: lighten(colors.$primary, 10);
+    }
+  }
+
+  &.pk-btn-white {
+    background-color: colors.$white;
+    color: colors.$primary;
+
+    &:hover {
+      background-color: darken(colors.$primary-bg,2);
+    }
+  }
+}
