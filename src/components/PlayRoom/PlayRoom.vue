@@ -1,6 +1,7 @@
 <template>
   <div class="play-room">
     <PokerTable :hidden="hidden" class="table" :users="users" />
+    <PlayRoomActions @reveal="$emit('reveal')" @start-over="$emit('start-over')" :revealed="!hidden" />
     <PokerCardList class="list" @selected="onSelected" />
   </div>
 </template>
@@ -9,10 +10,11 @@
 import { defineComponent } from 'vue';
 import PokerCardList from '@/components/PlayRoom/PokerCardList.vue';
 import PokerTable from '@/components/PlayRoom/PokerTable.vue';
+import PlayRoomActions from '@/components/PlayRoom/PlayRoomActions.vue';
 
 export default defineComponent({
   name: 'PlayRoom',
-  components: { PokerTable, PokerCardList },
+  components: { PlayRoomActions, PokerTable, PokerCardList },
   props: {
     room: {
       type: String,
@@ -33,7 +35,7 @@ export default defineComponent({
     };
     return { onSelected };
   },
-  emits: ['select-card'],
+  emits: ['select-card', 'start-over', 'reveal'],
 });
 </script>
 

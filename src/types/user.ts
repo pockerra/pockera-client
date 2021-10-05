@@ -1,12 +1,12 @@
 type UserId = string;
-type Room = string;
+type RoomName = string;
 type Card = number;
 
 interface User {
   id: UserId;
   name: string;
-  room?: Room;
+  room?: RoomName;
   card?: Card;
 }
 
-export { User, UserId, Room, Card };
+export { User, UserId, RoomName, Card };

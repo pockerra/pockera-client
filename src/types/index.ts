@@ -1,3 +1,3 @@
-import { Room, User, UserId } from './user';
+import { RoomName, User, UserId, Card } from './user';
 
-export { User, UserId, Room };
+export { User, UserId, RoomName, Card };

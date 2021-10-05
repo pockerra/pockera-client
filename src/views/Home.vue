@@ -1,7 +1,14 @@
 <template>
   <div class="home">
     <SignUpRoom @submit="onSubmit" v-if="!joined" />
-    <PlayRoom @select-card="selectCard" v-else :hidden="hidden" :users="users" />
+    <PlayRoom
+      @select-card="selectCard"
+      @reveal="reveal"
+      @start-over="startOver"
+      v-else
+      :hidden="hidden"
+      :users="users"
+    />
   </div>
 </template>
 
@@ -10,7 +17,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { io } from 'socket.io-client';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
-import { Card, Room, User, UserId } from '@/types/user';
+import { Card, RoomName, User, UserId } from '@/types';
 
 export default defineComponent({
   name: 'Home',
@@ -40,14 +47,22 @@ export default defineComponent({
       });
     };
 
-    hidden.value = false;
+    const reveal = () => {
+      socket.emit('reveal', { roomName: room.value });
+    };
+
+    const startOver = () => {
+      socket.emit('start', { roomName: room.value });
+    };
+
+    hidden.value = true;
 
     onMounted(async () => {
       await socket.connect();
 
       socket.on(
         'selected-card',
-        ({ usersInRoom }: { data: { card: Card; room: Room; userId: UserId }; usersInRoom: Array<User> }) => {
+        ({ usersInRoom }: { data: { card: Card; room: RoomName; userId: UserId }; usersInRoom: Array<User> }) => {
           users.value = usersInRoom;
         }
       );
@@ -59,9 +74,19 @@ export default defineComponent({
       socket.on('user-left', ({ usersInRoom }) => {
         users.value = usersInRoom;
       });
+
+      socket.on('revealed', () => {
+        hidden.value = false;
+      });
+
+      socket.on('started', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
+        users.value = usersInRoom;
+        console.log(usersInRoom);
+        hidden.value = true;
+      });
     });
 
-    return { onSubmit, users, hidden, joined, selectCard };
+    return { onSubmit, users, hidden, joined, selectCard, reveal, startOver };
   },
 });
 </script>
