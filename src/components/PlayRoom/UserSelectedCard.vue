@@ -1,6 +1,6 @@
 <template>
   <div class="user-selected-card" :class="{ hidden }">
-    {{ number }}
+    {{ shownNumber }}
   </div>
 </template>
 
@@ -17,6 +17,11 @@ export default defineComponent({
     number: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    shownNumber() {
+      return this.number ? this.number : '?';
     },
   },
 });

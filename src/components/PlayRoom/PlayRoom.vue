@@ -1,20 +1,22 @@
 <template>
   <div class="play-room">
     <PokerTable :hidden="hidden" class="table" :users="users" />
-    <PlayRoomActions @reveal="$emit('reveal')" @start-over="$emit('start-over')" :revealed="!hidden" />
+    <PlayRoomActions @reveal="onReveal" @start-over="$emit('start-over')" :revealed="!hidden" v-show="!start" />
     <PokerCardList class="list" @selected="onSelected" />
+    <PlayRoomCounter :start="start" @stopped="onStopped" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import PokerCardList from '@/components/PlayRoom/PokerCardList.vue';
 import PokerTable from '@/components/PlayRoom/PokerTable.vue';
 import PlayRoomActions from '@/components/PlayRoom/PlayRoomActions.vue';
+import PlayRoomCounter from '@/components/PlayRoom/PlayRoomCounter.vue';
 
 export default defineComponent({
   name: 'PlayRoom',
-  components: { PlayRoomActions, PokerTable, PokerCardList },
+  components: { PlayRoomCounter, PlayRoomActions, PokerTable, PokerCardList },
   props: {
     room: {
       type: String,
@@ -30,10 +32,21 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const start = ref(false);
     const onSelected = (card: number) => {
       emit('select-card', card);
     };
-    return { onSelected };
+
+    const onReveal = () => {
+      start.value = true;
+    };
+
+    const onStopped = () => {
+      start.value = false;
+      emit('reveal');
+    };
+
+    return { onSelected, onReveal, start, onStopped };
   },
   emits: ['select-card', 'start-over', 'reveal'],
 });
