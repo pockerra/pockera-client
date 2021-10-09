@@ -1,5 +1,5 @@
 <template>
-  <div class="play-room-counter">{{ number }}</div>
+  <div class="play-room-counter" v-show="start">{{ number }}</div>
 </template>
 
 <script lang="ts">
@@ -39,4 +39,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@use '~@/assets/scss/res/rem.scss';
+
+.play-room-counter {
+  font-weight: bold;
+  font-size: rem.rem-calc(24);
+}
+</style>

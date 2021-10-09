@@ -2,10 +2,12 @@
   <div class="home">
     <SignUpRoom @submit="onSubmit" v-if="!joined" />
     <PlayRoom
+      v-else
       @select-card="selectCard"
+      @start-countdown="startCountdown"
       @reveal="reveal"
       @start-over="startOver"
-      v-else
+      :start="start"
       :hidden="hidden"
       :users="users"
     />
@@ -29,6 +31,7 @@ export default defineComponent({
     const currentUser = ref('');
     const hidden = ref<boolean>(false);
     const joined = ref<boolean>(false);
+    const start = ref<boolean>(false);
     const room = ref<string>('123');
 
     const onSubmit = async ({ name }: { name: string }) => {
@@ -47,7 +50,15 @@ export default defineComponent({
       });
     };
 
+    const startCountdown = () => {
+      start.value = true;
+      socket.emit('start-countdown', {
+        roomName: room.value,
+      });
+    };
+
     const reveal = () => {
+      start.value = false;
       socket.emit('reveal', { roomName: room.value });
     };
 
@@ -79,6 +90,10 @@ export default defineComponent({
         hidden.value = false;
       });
 
+      socket.on('start-countdown', () => {
+        start.value = true;
+      });
+
       socket.on('started', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
         users.value = usersInRoom;
         console.log(usersInRoom);
@@ -86,7 +101,7 @@ export default defineComponent({
       });
     });
 
-    return { onSubmit, users, hidden, joined, selectCard, reveal, startOver };
+    return { onSubmit, users, hidden, joined, selectCard, reveal, startOver, startCountdown: startCountdown, start };
   },
 });
 </script>

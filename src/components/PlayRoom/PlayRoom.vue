@@ -1,14 +1,16 @@
 <template>
   <div class="play-room">
     <PokerTable :hidden="hidden" class="table" :users="users" />
-    <PlayRoomActions @reveal="onReveal" @start-over="$emit('start-over')" :revealed="!hidden" v-show="!start" />
+    <div class="actions">
+      <PlayRoomActions @reveal="onReveal" @start-over="$emit('start-over')" :revealed="!hidden" v-show="!start" />
+      <PlayRoomCounter :start="start" @stopped="onStopped" />
+    </div>
     <PokerCardList class="list" @selected="onSelected" />
-    <PlayRoomCounter :start="start" @stopped="onStopped" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import PokerCardList from '@/components/PlayRoom/PokerCardList.vue';
 import PokerTable from '@/components/PlayRoom/PokerTable.vue';
 import PlayRoomActions from '@/components/PlayRoom/PlayRoomActions.vue';
@@ -30,25 +32,27 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    start: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
-    const start = ref(false);
     const onSelected = (card: number) => {
       emit('select-card', card);
     };
 
     const onReveal = () => {
-      start.value = true;
+      emit('start-countdown');
     };
 
     const onStopped = () => {
-      start.value = false;
       emit('reveal');
     };
 
-    return { onSelected, onReveal, start, onStopped };
+    return { onSelected, onReveal, onStopped };
   },
-  emits: ['select-card', 'start-over', 'reveal'],
+  emits: ['select-card', 'start-over', 'reveal', 'start-countdown'],
 });
 </script>
 
@@ -60,6 +64,11 @@ export default defineComponent({
 
   .table {
     margin-top: 3rem;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
