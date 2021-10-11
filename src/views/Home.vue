@@ -1,114 +1,40 @@
 <template>
-  <div class="home">
-    <SignUpRoom @submit="onSubmit" v-if="!joined" />
-    <PlayRoom
-      v-else
-      @select-card="selectCard"
-      @start-countdown="startCountdown"
-      @reveal="reveal"
-      @start-over="startOver"
-      :start="start"
-      :hidden="hidden"
-      :users="users"
-    />
+  <div class="room">
+    <SignUpRoom @submit="onSubmit" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import { io } from 'socket.io-client';
+import { defineComponent } from 'vue';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
-import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
-import { Card, RoomName, User, UserId } from '@/types';
+import randomString from '@/libs/randomString';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default defineComponent({
-  name: 'Home',
-  components: { PlayRoom, SignUpRoom },
+  name: 'Room',
+  components: { SignUpRoom },
   setup() {
-    const socket = io('http://localhost:3001');
+    const onSubmit = ({ name }) => {
+      const router = useRouter();
+      const route = useRoute();
+      const store = useStore();
 
-    const users = ref<Array<User>>([]);
-    const currentUser = ref('');
-    const hidden = ref<boolean>(false);
-    const joined = ref<boolean>(false);
-    const start = ref<boolean>(false);
-    const room = ref<string>('123');
-
-    const onSubmit = async ({ name }: { name: string }) => {
-      if (name) {
-        await socket.emit('join-room', { name, roomId: room.value });
-        currentUser.value = name;
-        joined.value = true;
+      const roomName = randomString();
+      store.commit('setUserName', { name });
+      if (route.path === '/') {
+        router.push(`/room/${roomName}`);
       }
     };
 
-    const selectCard = (card: number) => {
-      socket.emit('select-card', {
-        card,
-        room: room.value,
-        userId: socket.id,
-      });
-    };
-
-    const startCountdown = () => {
-      start.value = true;
-      socket.emit('start-countdown', {
-        roomName: room.value,
-      });
-    };
-
-    const reveal = () => {
-      start.value = false;
-      socket.emit('reveal', { roomName: room.value });
-    };
-
-    const startOver = () => {
-      socket.emit('start', { roomName: room.value });
-    };
-
-    hidden.value = true;
-
-    onMounted(async () => {
-      await socket.connect();
-
-      socket.on(
-        'selected-card',
-        ({ usersInRoom }: { data: { card: Card; room: RoomName; userId: UserId }; usersInRoom: Array<User> }) => {
-          users.value = usersInRoom;
-        }
-      );
-
-      socket.on('user-joined', ({ usersInRoom }) => {
-        users.value = usersInRoom;
-      });
-
-      socket.on('user-left', ({ usersInRoom }) => {
-        users.value = usersInRoom;
-      });
-
-      socket.on('revealed', () => {
-        hidden.value = false;
-      });
-
-      socket.on('start-countdown', () => {
-        start.value = true;
-      });
-
-      socket.on('started', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
-        users.value = usersInRoom;
-        console.log(usersInRoom);
-        hidden.value = true;
-      });
-    });
-
-    return { onSubmit, users, hidden, joined, selectCard, reveal, startOver, startCountdown: startCountdown, start };
+    return { onSubmit };
   },
 });
 </script>
 
 <style lang="scss" src="../assets/scss/global.scss" />
-<style lang="scss" scoped>
-.home {
+<style scoped lang="scss">
+.room {
   max-width: 500px;
   margin: 0 auto;
   text-align: left;
