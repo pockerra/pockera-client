@@ -3,7 +3,7 @@
     <form>
       <label>
         Name:
-        <input type="text" class="pk-input" placeholder="John" v-model="name" />
+        <input type="text" class="pk-input" placeholder="John" required v-model="name" />
       </label>
 
       <PkButton type="submit" block>enter</PkButton>

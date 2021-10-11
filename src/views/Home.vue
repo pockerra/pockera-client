@@ -8,23 +8,22 @@
 import { defineComponent } from 'vue';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import randomString from '@/libs/randomString';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'Room',
   components: { SignUpRoom },
   setup() {
-    const onSubmit = ({ name }) => {
-      const router = useRouter();
-      const route = useRoute();
-      const store = useStore();
+    const router = useRouter();
+    const store = useStore();
 
+    const onSubmit = ({ name }) => {
       const roomName = randomString();
       store.commit('setUserName', { name });
-      if (route.path === '/') {
-        router.push(`/room/${roomName}`);
-      }
+      store.commit('setRoom', { room: roomName });
+
+      router.push(`/room/${roomName}`);
     };
 
     return { onSubmit };

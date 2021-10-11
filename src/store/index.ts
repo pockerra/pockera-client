@@ -11,6 +11,9 @@ export default createStore({
     setUserName(state, payload) {
       state.user.name = payload.name;
     },
+    setRoom(state, payload: { room: string }) {
+      state.user.room = payload.room;
+    },
   },
   actions: {},
   modules: {},

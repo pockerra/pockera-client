@@ -1,6 +1,8 @@
 <template>
   <div class="home">
+    <SignUpRoom @submit="onSubmit" v-if="!joined" />
     <PlayRoom
+      v-else
       @select-card="selectCard"
       @start-countdown="startCountdown"
       @reveal="reveal"
@@ -17,10 +19,13 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { io } from 'socket.io-client';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
 import { Card, RoomName, User, UserId } from '@/types';
+import SignUpRoom from '@/components/signup/SignUpRoom.vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'Home',
-  components: { PlayRoom },
+  components: { SignUpRoom, PlayRoom },
   setup() {
     const socket = io('http://localhost:3001');
 
@@ -29,11 +34,22 @@ export default defineComponent({
     const hidden = ref<boolean>(false);
     const joined = ref<boolean>(false);
     const start = ref<boolean>(false);
-    const room = ref<string>('123');
+
+    const store = useStore();
+    const route = useRoute();
+
+    const room = route.params.roomId;
+
+    if (store.state.user.name) {
+      joined.value = true;
+      store.commit('setRoom', { room });
+      socket.emit('join-room', { name: store.state.user.name, roomId: room });
+    }
 
     const onSubmit = async ({ name }: { name: string }) => {
       if (name) {
-        await socket.emit('join-room', { name, roomId: room.value });
+        store.commit('setUserName', { name });
+        await socket.emit('join-room', { name, roomId: room });
         currentUser.value = name;
         joined.value = true;
       }
@@ -42,7 +58,7 @@ export default defineComponent({
     const selectCard = (card: number) => {
       socket.emit('select-card', {
         card,
-        room: room.value,
+        room: room,
         userId: socket.id,
       });
     };
@@ -50,17 +66,17 @@ export default defineComponent({
     const startCountdown = () => {
       start.value = true;
       socket.emit('start-countdown', {
-        roomName: room.value,
+        roomName: room,
       });
     };
 
     const reveal = () => {
       start.value = false;
-      socket.emit('reveal', { roomName: room.value });
+      socket.emit('reveal', { roomName: room });
     };
 
     const startOver = () => {
-      socket.emit('start', { roomName: room.value });
+      socket.emit('start', { roomName: room });
     };
 
     hidden.value = true;
