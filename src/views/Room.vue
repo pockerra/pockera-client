@@ -27,7 +27,7 @@ export default defineComponent({
   name: 'Home',
   components: { SignUpRoom, PlayRoom },
   setup() {
-    const socket = io('http://localhost:3001');
+    const socket = io('https://pockerra-backend.herokuapp.com/');
 
     const users = ref<Array<User>>([]);
     const currentUser = ref('');
