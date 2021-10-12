@@ -5,7 +5,7 @@
       <PlayRoomActions @reveal="onReveal" @start-over="$emit('start-over')" :revealed="!hidden" v-show="!start" />
       <PlayRoomCounter :start="start" @stopped="onStopped" />
     </div>
-    <PokerCardList class="list" @selected="onSelected" />
+    <PokerCardList v-show="hidden && !start" class="list" @selected="onSelected" />
   </div>
 </template>
 

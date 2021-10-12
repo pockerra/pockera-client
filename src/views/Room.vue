@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { io } from 'socket.io-client';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
 import { Card, RoomName, User, UserId } from '@/types';
@@ -31,10 +31,8 @@ export default defineComponent({
 
     const users = ref<Array<User>>([]);
     const currentUser = ref('');
-    const hidden = ref<boolean>(false);
     const joined = ref<boolean>(false);
     const start = ref<boolean>(false);
-
     const store = useStore();
     const route = useRoute();
 
@@ -42,7 +40,7 @@ export default defineComponent({
 
     if (store.state.user.name) {
       joined.value = true;
-      store.commit('setRoom', { room });
+      store.commit('setUserRoom', { room });
       socket.emit('join-room', { name: store.state.user.name, roomId: room });
     }
 
@@ -56,7 +54,7 @@ export default defineComponent({
     };
 
     const selectCard = (card: number) => {
-      store.commit('setCard', { card });
+      store.commit('setUserCard', { card });
       socket.emit('select-card', {
         card,
         room: room,
@@ -78,9 +76,8 @@ export default defineComponent({
 
     const startOver = () => {
       socket.emit('start', { roomName: room });
+      store.commit('setUserCard', 0);
     };
-
-    hidden.value = true;
 
     onMounted(async () => {
       await socket.connect();
@@ -92,8 +89,9 @@ export default defineComponent({
         }
       );
 
-      socket.on('user-joined', ({ usersInRoom }) => {
+      socket.on('user-joined', ({ usersInRoom, room }) => {
         users.value = usersInRoom;
+        store.commit('setRoom', room);
       });
 
       socket.on('user-left', ({ usersInRoom }) => {
@@ -101,21 +99,30 @@ export default defineComponent({
       });
 
       socket.on('revealed', () => {
-        hidden.value = false;
+        store.commit('showCards');
       });
 
       socket.on('start-countdown', () => {
         start.value = true;
       });
 
-      socket.on('start ed', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
+      socket.on('started', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
         users.value = usersInRoom;
-        console.log(usersInRoom);
-        hidden.value = true;
+        store.commit('hideCards');
       });
     });
 
-    return { onSubmit, users, hidden, joined, selectCard, reveal, startOver, startCountdown: startCountdown, start };
+    return {
+      onSubmit,
+      users,
+      joined,
+      selectCard,
+      reveal,
+      startOver,
+      startCountdown: startCountdown,
+      start,
+      hidden: computed(() => store.state.room.hidden),
+    };
   },
 });
 </script>

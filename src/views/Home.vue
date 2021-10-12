@@ -21,7 +21,8 @@ export default defineComponent({
     const onSubmit = ({ name }: { name: string }) => {
       const roomName = randomString();
       store.commit('setUserName', { name });
-      store.commit('setRoom', { room: roomName });
+      store.commit('setUserRoom', { room: roomName });
+      store.commit('setRoom', { name: roomName, hidden: true });
 
       router.push(`/room/${roomName}`);
     };

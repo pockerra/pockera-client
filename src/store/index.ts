@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import { Room } from '@/types/room';
 
 export default createStore({
   state: {
@@ -7,16 +8,29 @@ export default createStore({
       room: '',
       card: -1,
     },
+    room: {
+      name: '',
+      hidden: true,
+    },
   },
   mutations: {
     setUserName(state, payload) {
       state.user.name = payload.name;
     },
-    setRoom(state, payload: { room: string }) {
+    setUserRoom(state, payload: { room: string }) {
       state.user.room = payload.room;
     },
-    setCard(state, payload: { card: number }) {
+    setUserCard(state, payload: { card: number }) {
       state.user.card = payload.card;
+    },
+    showCards(state) {
+      state.room.hidden = false;
+    },
+    hideCards(state) {
+      state.room.hidden = true;
+    },
+    setRoom(state, payload: Room) {
+      state.room = payload;
     },
   },
   actions: {},
