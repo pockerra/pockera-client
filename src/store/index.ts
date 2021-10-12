@@ -5,6 +5,7 @@ export default createStore({
     user: {
       name: '',
       room: '',
+      card: -1,
     },
   },
   mutations: {
@@ -13,6 +14,9 @@ export default createStore({
     },
     setRoom(state, payload: { room: string }) {
       state.user.room = payload.room;
+    },
+    setCard(state, payload: { card: number }) {
+      state.user.card = payload.card;
     },
   },
   actions: {},

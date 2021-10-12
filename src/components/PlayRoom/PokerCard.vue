@@ -1,5 +1,5 @@
 <template>
-  <div class="poker-card" @click="onClick">{{ number }}</div>
+  <div class="poker-card" @click="onClick" :class="{ active }">{{ number }}</div>
 </template>
 
 <script lang="ts">
@@ -11,6 +11,10 @@ export default defineComponent({
     number: {
       type: Number,
       default: 0,
+    },
+    active: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, { emit }) {
@@ -41,5 +45,9 @@ export default defineComponent({
   color: colors.$white;
   cursor: pointer;
   border-radius: 4px;
+
+  &.active {
+    transform: translateY(-0.5rem);
+  }
 }
 </style>

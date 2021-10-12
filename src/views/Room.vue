@@ -56,6 +56,7 @@ export default defineComponent({
     };
 
     const selectCard = (card: number) => {
+      store.commit('setCard', { card });
       socket.emit('select-card', {
         card,
         room: room,

@@ -1,14 +1,21 @@
 <template>
   <div class="poker-card-list">
-    <PokerCard v-for="card in fibonacci" @click="onClick(card)" :key="card" :number="card" />
+    <PokerCard
+      v-for="card in fibonacci"
+      :active="selectedCard === card"
+      @click="onClick(card)"
+      :key="card"
+      :number="card"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import fibonacci from '@/libs/fibonacci';
 import PokerCard from '@/components/PlayRoom/PokerCard.vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'PokerCardList',
@@ -18,7 +25,11 @@ export default defineComponent({
       emit('selected', number);
     };
 
-    return { fibonacci, onClick };
+    const store = useStore();
+
+    const selectedCard = computed<number>(() => store.state.user.card);
+
+    return { fibonacci, onClick, selectedCard };
   },
 });
 </script>
