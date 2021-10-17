@@ -31,7 +31,8 @@ export default defineComponent({
   name: 'Home',
   components: { PkLoader, SignUpRoom, PlayRoom },
   setup() {
-    const socket = io('https://pockerra-backend.herokuapp.com/');
+    const apiUrl = process.env.VUE_APP_API_ADDRESS;
+    const socket = io(apiUrl || 'https://pockerra-backend.herokuapp.com/');
 
     const users = ref<Array<User>>([]);
     const currentUser = ref('');
