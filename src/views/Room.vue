@@ -2,7 +2,7 @@
   <div class="home">
     <SignUpRoom @submit="onSubmit" v-if="!joined" />
     <PlayRoom
-      v-else
+      v-else-if="!loading"
       @select-card="selectCard"
       @start-countdown="startCountdown"
       @reveal="reveal"
@@ -11,6 +11,9 @@
       :hidden="hidden"
       :users="users"
     />
+    <div class="loading" v-else>
+      <PkLoader color="#999" />
+    </div>
   </div>
 </template>
 
@@ -22,10 +25,11 @@ import { Card, RoomName, User, UserId } from '@/types';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import PkLoader from '@/components/shared/PkLoader/PkLoader.vue';
 
 export default defineComponent({
   name: 'Home',
-  components: { SignUpRoom, PlayRoom },
+  components: { PkLoader, SignUpRoom, PlayRoom },
   setup() {
     const socket = io('https://pockerra-backend.herokuapp.com/');
 
@@ -33,6 +37,7 @@ export default defineComponent({
     const currentUser = ref('');
     const joined = ref<boolean>(false);
     const start = ref<boolean>(false);
+    const loading = ref<boolean>(true);
     const store = useStore();
     const route = useRoute();
 
@@ -82,6 +87,10 @@ export default defineComponent({
     onMounted(async () => {
       await socket.connect();
 
+      socket.onAny(() => {
+        loading.value = false;
+      });
+
       socket.on(
         'selected-card',
         ({ usersInRoom }: { data: { card: Card; room: RoomName; userId: UserId }; usersInRoom: Array<User> }) => {
@@ -115,6 +124,7 @@ export default defineComponent({
     return {
       onSubmit,
       users,
+      loading,
       joined,
       selectCard,
       reveal,
@@ -134,5 +144,11 @@ export default defineComponent({
   margin: 0 auto;
   text-align: left;
   padding: 2rem 0 6rem 0;
+
+  .loading {
+    display: flex;
+    margin-top: 8rem;
+    justify-content: center;
+  }
 }
 </style>
