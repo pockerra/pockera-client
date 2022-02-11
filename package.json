@@ -6,10 +6,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "redis": "^4.0.2",
     "register-service-worker": "^1.7.1",
     "sass-mq": "^5.0.1",
     "vue": "^3.0.0",
