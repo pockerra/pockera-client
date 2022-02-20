@@ -28,7 +28,6 @@ export default defineComponent({
     const halfSize = computed(() => Math.ceil(usersLength.value / 2));
 
     const topUsers = computed(() => {
-      console.log(props.users);
       if (!usersLength.value) return [];
       const users = [...props.users];
       return users?.slice(0, halfSize.value);
