@@ -62,17 +62,17 @@ export default defineComponent({
     const selectCard = (card: number) => {
       if (store.state.user.card !== card) {
         store.commit('setUserCard', { card });
-        
+
         socket.emit('select-card', {
-          card: 0,
+          card: card,
           room: room,
           userId: socket.id,
         });
       } else {
         store.commit('setUserCard', { card: 0 });
-        
+
         socket.emit('select-card', {
-          card,
+          card: 0,
           room: room,
           userId: socket.id,
         });
