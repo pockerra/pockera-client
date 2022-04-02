@@ -33,7 +33,7 @@ export default defineComponent({
 .poker-user {
   background: colors.$alto-gray;
   border-radius: 10px;
-  width: 6rem;
+  max-width: 10rem;
   padding: 1rem;
   position: relative;
   display: flex;

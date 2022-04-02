@@ -1,5 +1,9 @@
 <template>
-  <div class="poker-card" @click="onClick" :class="{ active }">{{ number }}</div>
+  <div class="poker-card" @click="onClick" :class="{ active, 'turn-of': turnOf }">
+    <div class="left">{{ number }}</div>
+    <div class="center">{{ number }}</div>
+    <div class="right">{{ number }}</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -11,6 +15,10 @@ export default defineComponent({
     number: {
       type: Number,
       default: 0,
+    },
+    turnOf: {
+      type: Boolean,
+      default: false,
     },
     active: {
       type: Boolean,
@@ -36,18 +44,89 @@ export default defineComponent({
 @use '~@/assets/scss/res/colors.scss';
 
 .poker-card {
-  width: rem.rem-calc(50px);
-  height: rem.rem-calc(100px);
-  background: colors.$primary-gradient;
+  width: rem.rem-calc(65px);
+  height: rem.rem-calc(120px);
+  background: #4b00ff;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   color: colors.$white;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
+  border: 1px solid #ffffff;
+  padding: 0.2rem 0.4rem;
+
+  .left {
+    text-align: left;
+    width: 100%;
+    color: #fff;
+    padding-bottom: 5px;
+  }
+
+  .center {
+    text-align: center;
+    width: 100%;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    padding: 1rem 0;
+  }
+
+  .right {
+    text-align: right;
+    width: 100%;
+    color: #fff;
+    padding-bottom: 5px;
+  }
 
   &.active {
     transform: translateY(-0.5rem);
+    -webkit-animation: rotateCard 0.5s linear;
+    -moz-animation: rotateCard 0.5s linear;
+    -o-animation: rotateCard 0.5s linear;
+    animation: rotateCard 0.5s linear;
+  }
+
+  &.turn-of {
+    background: darken(colors.$alto-gray, 20);
+  }
+
+  &:hover {
+    background: lighten(colors.$primary, 10);
+  }
+
+  @-webkit-keyframes rotateCard {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+  @-moz-keyframes rotateCard {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+  @-o-keyframes rotateCard {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+  @keyframes rotateCard {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
   }
 }
 </style>

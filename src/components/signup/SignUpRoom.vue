@@ -3,7 +3,7 @@
     <form>
       <label>
         Name:
-        <input type="text" class="pk-input" placeholder="John" required v-model="name" />
+        <input ref="input" type="text" class="pk-input" placeholder="John" required v-model="name" />
       </label>
 
       <PkButton type="submit" block>enter</PkButton>
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref, nextTick } from 'vue';
 import PkButton from '@/components/shared/PkButton/PkButton.vue';
 
 export default defineComponent({
@@ -21,12 +21,20 @@ export default defineComponent({
   emits: ['submit'],
   setup(props, { emit }) {
     const name = ref('');
+    const input = ref<HTMLInputElement>();
+
+    onMounted(() => {
+      nextTick(() => {
+        const inputEl: HTMLInputElement | undefined= input.value;
+        inputEl?.focus();
+      });
+    });
 
     const onSubmit = () => {
       emit('submit', { name: name.value });
     };
 
-    return { onSubmit, name };
+    return { onSubmit, name, input };
   },
 });
 </script>
@@ -35,7 +43,7 @@ export default defineComponent({
 .sign-up-room {
   label {
     display: block;
-    margin-top: 1.5rem;
+    margin: 1.5rem 0;
   }
 }
 </style>

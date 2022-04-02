@@ -1,6 +1,4 @@
-type UserId = string;
-type RoomName = string;
-type Card = number;
+import { UserId, RoomName, Card } from '@/types/global';
 
 interface User {
   id: UserId;
@@ -9,4 +7,4 @@ interface User {
   card?: Card;
 }
 
-export { User, UserId, RoomName, Card };
+export { User, UserId, Card };

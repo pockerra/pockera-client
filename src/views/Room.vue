@@ -28,7 +28,7 @@ import { useRoute } from 'vue-router';
 import PkLoader from '@/components/shared/PkLoader/PkLoader.vue';
 
 export default defineComponent({
-  name: 'Home',
+  name: 'Room',
   components: { PkLoader, SignUpRoom, PlayRoom },
   setup() {
     const apiUrl = process.env.VUE_APP_API_ADDRESS;
