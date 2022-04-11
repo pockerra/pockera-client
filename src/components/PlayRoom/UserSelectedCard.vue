@@ -1,5 +1,5 @@
 <template>
-  <div class="user-selected-card" :class="{ hidden }">
+  <div class="user-selected-card" v-if="!hidden">
     {{ shownNumber }}
   </div>
 </template>
@@ -41,10 +41,5 @@ export default defineComponent({
   justify-content: center;
   font-weight: bold;
   font-size: rem.rem-calc(24px);
-
-  &.hidden {
-    background: #000;
-    color: transparent;
-  }
 }
 </style>

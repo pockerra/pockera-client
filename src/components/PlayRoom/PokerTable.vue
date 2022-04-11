@@ -57,6 +57,16 @@ export default defineComponent({
     height: 200px;
     border-radius: 100px;
     background-color: colors.$chateau-green;
+    border: 5px solid #a95555;
+    &::after {
+      content: '';
+      border: 7px solid rgba(0, 0, 0, 0.1);
+      display: block;
+      width: 100%;
+      height: 190px;
+      border-radius: 130px;
+      left: 0;
+    }
   }
 }
 </style>

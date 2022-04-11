@@ -10,16 +10,17 @@ import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import randomString from '@/libs/randomString';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { RoomName } from '@/types/global';
 
 export default defineComponent({
-  name: 'Room',
+  name: 'Home',
   components: { SignUpRoom },
   setup() {
     const router = useRouter();
     const store = useStore();
 
     const onSubmit = ({ name }: { name: string }) => {
-      const roomName = randomString();
+      const roomName: RoomName = randomString();
       store.commit('setUserName', { name });
       store.commit('setUserRoom', { room: roomName });
       store.commit('setRoom', { name: roomName, hidden: true });

@@ -3,6 +3,7 @@
     <PokerCard
       v-for="card in fibonacci"
       :active="selectedCard === card"
+      :turn-of="selectedCard && selectedCard !== card"
       @click="onClick(card)"
       :key="card"
       :number="card"
