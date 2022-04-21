@@ -64,6 +64,7 @@ export default defineComponent({
     top: 100%;
     margin-bottom: 0;
     margin-top: rem.rem-calc(30px);
+    color: colors.$base-black;
   }
 
   &.selected {
