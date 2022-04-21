@@ -25,7 +25,7 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(() => {
-        const inputEl: HTMLInputElement | undefined= input.value;
+        const inputEl: HTMLInputElement | undefined = input.value;
         inputEl?.focus();
       });
     });

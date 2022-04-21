@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import PokerUser from '@/components/PlayRoom/PokerUser.vue';
 import UserSelectedCard from '@/components/PlayRoom/UserSelectedCard.vue';
 
