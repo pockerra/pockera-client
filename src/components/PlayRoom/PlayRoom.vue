@@ -50,6 +50,8 @@ export default defineComponent({
       emit('reveal');
     };
 
+    console.log(props);
+
     return { onSelected, onReveal, onStopped };
   },
   emits: ['select-card', 'start-over', 'reveal', 'start-countdown'],

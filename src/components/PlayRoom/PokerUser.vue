@@ -1,5 +1,5 @@
 <template>
-  <div class="poker-user" :class="{ 'is-top': isTop }">
+  <div class="poker-user" :class="{ 'is-top': isTop, selected }">
     <span>
       <slot>{{ name }}</slot>
     </span>
@@ -23,6 +23,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    selected: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 </script>
@@ -30,6 +34,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @use '~@/assets/scss/res/colors.scss';
 @use '~@/assets/scss/res/rem.scss';
+
 .poker-user {
   background: colors.$alto-gray;
   border-radius: 10px;
@@ -45,6 +50,7 @@ export default defineComponent({
     text-overflow: ellipsis;
     display: block;
     width: 100%;
+    text-transform: capitalize;
   }
 
   .card {
@@ -58,6 +64,11 @@ export default defineComponent({
     top: 100%;
     margin-bottom: 0;
     margin-top: rem.rem-calc(30px);
+  }
+
+  &.selected {
+    background: colors.$cornflower-blue;
+    color: colors.$white;
   }
 }
 </style>

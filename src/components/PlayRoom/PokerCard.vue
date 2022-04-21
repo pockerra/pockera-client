@@ -1,5 +1,5 @@
 <template>
-  <div class="poker-card" @click="onClick" :class="{ active, 'turn-of': turnOf }">
+  <div class="poker-card" @click="onClick" :class="{ active, 'turn-off': turnOff }">
     <div class="left">{{ number }}</div>
     <div class="center">{{ number }}</div>
     <div class="right">{{ number }}</div>
@@ -16,7 +16,7 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
-    turnOf: {
+    turnOff: {
       type: Boolean,
       default: false,
     },
@@ -88,7 +88,7 @@ export default defineComponent({
     animation: rotateCard 0.5s linear;
   }
 
-  &.turn-of {
+  &.turn-off {
     background: darken(colors.$alto-gray, 20);
   }
 
