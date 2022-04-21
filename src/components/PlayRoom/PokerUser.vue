@@ -57,6 +57,7 @@ export default defineComponent({
     position: absolute;
     bottom: 100%;
     margin-bottom: rem.rem-calc(30px);
+    color: colors.$base-black !important;
   }
 
   &.is-top .card {
@@ -64,7 +65,6 @@ export default defineComponent({
     top: 100%;
     margin-bottom: 0;
     margin-top: rem.rem-calc(30px);
-    color: colors.$base-black;
   }
 
   &.selected {
