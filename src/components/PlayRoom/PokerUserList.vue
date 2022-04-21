@@ -32,7 +32,10 @@ export default defineComponent({
     },
   },
   setup() {
-    const cardNumber = (cardArray: string[]) => (cardArray[0] ? parseInt(cardArray[0], 10) : 0);
+    const cardNumber = (cardArray: string[]) => {
+      if (!cardArray[0]) return cardArray;
+      return cardArray[0] ? parseInt(cardArray[0], 10) : 0;
+    };
 
     const selected = (cardArray: string[]) => cardNumber(cardArray) > 0;
 
