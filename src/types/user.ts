@@ -1,4 +1,4 @@
-import { UserId, RoomName, Card } from '@/types/global';
+import type { UserId, RoomName, Card } from '@/types/global';
 
 interface User {
   id: UserId;
@@ -7,4 +7,4 @@ interface User {
   card?: Card;
 }
 
-export { User, UserId, Card };
+export type { User, UserId, Card };

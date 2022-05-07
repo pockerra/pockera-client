@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { Room } from '@/types/room';
+import type { Room } from '@/types/room';
 
 export default createStore({
   state: {

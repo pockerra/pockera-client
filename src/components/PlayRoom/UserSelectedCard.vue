@@ -28,8 +28,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@use '~@/assets/scss/res/rem.scss';
-@use '~@/assets/scss/res/colors.scss';
+@use '@/assets/scss/res/rem.scss';
+@use '@/assets/scss/res/colors.scss';
 
 .user-selected-card {
   width: rem.rem-calc(40px);

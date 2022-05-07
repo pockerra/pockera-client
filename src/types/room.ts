@@ -1,4 +1,4 @@
-import { RoomName } from './global';
+import type { RoomName } from './global';
 
 export interface Room {
   name: RoomName;

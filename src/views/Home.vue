@@ -10,10 +10,10 @@ import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import randomString from '@/libs/randomString';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { RoomName } from '@/types/global';
+import type { RoomName } from '@/types/global';
 
 export default defineComponent({
-  name: 'Home',
+  name: 'HomeView',
   components: { SignUpRoom },
   setup() {
     const router = useRouter();

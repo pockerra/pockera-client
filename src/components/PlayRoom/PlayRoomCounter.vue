@@ -40,7 +40,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@use '~@/assets/scss/res/rem.scss';
+@use '@/assets/scss/res/rem.scss';
 
 .play-room-counter {
   font-weight: bold;

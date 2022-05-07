@@ -1,4 +1,4 @@
-import { User } from './user';
-import { RoomName, UserId, Card } from '@/types/global';
+import type { User } from './user';
+import type { RoomName, UserId, Card } from '@/types/global';
 
-export { User, UserId, RoomName, Card };
+export type { User, UserId, RoomName, Card };

@@ -32,8 +32,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@use '~@/assets/scss/res/colors.scss';
-@use '~@/assets/scss/res/rem.scss';
+@use '@/assets/scss/res/colors.scss';
+@use '@/assets/scss/res/rem.scss';
 
 .poker-user {
   max-width: 10rem;

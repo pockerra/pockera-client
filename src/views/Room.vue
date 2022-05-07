@@ -21,17 +21,18 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { io } from 'socket.io-client';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
-import { Card, RoomName, User, UserId } from '@/types';
+import type { Card, RoomName, User, UserId } from '@/types';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import PkLoader from '@/components/shared/PkLoader/PkLoader.vue';
 
 export default defineComponent({
-  name: 'Room',
+  name: 'RoomView',
   components: { PkLoader, SignUpRoom, PlayRoom },
   setup() {
-    const apiUrl = process.env.VUE_APP_API_ADDRESS;
+    const apiUrl = import.meta.env.VITE_API_ADDRESS;
+    console.log(apiUrl);
     const socket = io(apiUrl || 'https://pockerra-backend.herokuapp.com/');
 
     const users = ref<Array<User>>([]);
