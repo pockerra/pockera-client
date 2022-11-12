@@ -17,15 +17,12 @@ export default defineComponent({
     const number = ref(3);
 
     const countDown = () => {
-      const timeout = setTimeout(() => {
-        number.value -= 1;
-        if (number.value > 0) {
-          countDown();
-        } else {
-          clearTimeout(timeout);
+      const downloadTimer = setInterval(() => {
+        if (number.value <= 0) {
+          clearInterval(downloadTimer);
           emit('stopped');
-          number.value = 3;
         }
+        number.value -= 1;
       }, 1000);
     };
 

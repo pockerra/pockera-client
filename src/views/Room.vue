@@ -129,6 +129,7 @@ export default defineComponent({
 
       socket.on('started', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
         users.value = usersInRoom;
+        store.setUserCard({ card: 0 });
         store.hideCards();
       });
     });
