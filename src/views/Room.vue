@@ -23,7 +23,7 @@ import { io } from 'socket.io-client';
 import PlayRoom from '@/components/PlayRoom/PlayRoom.vue';
 import type { Card, RoomName, User, UserId } from '@/types';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
-import { useStore } from 'vuex';
+import { useStore } from '@/store/pinia';
 import { useRoute } from 'vue-router';
 import PkLoader from '@/components/shared/PkLoader/PkLoader.vue';
 
@@ -32,7 +32,6 @@ export default defineComponent({
   components: { PkLoader, SignUpRoom, PlayRoom },
   setup() {
     const apiUrl = import.meta.env.VITE_API_ADDRESS;
-    console.log(apiUrl);
     const socket = io(apiUrl || 'https://pockerra-backend.herokuapp.com/');
 
     const users = ref<Array<User>>([]);
@@ -43,17 +42,17 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const room = route.params.roomId;
+    const room = route.params.roomId.toString();
 
-    if (store.state.user.name) {
+    if (store.user.name) {
       joined.value = true;
-      store.commit('setUserRoom', { room });
-      socket.emit('join-room', { name: store.state.user.name, roomId: room });
+      store.setUserRoom({ room });
+      socket.emit('join-room', { name: store.user.name, roomId: room });
     }
 
     const onSubmit = async ({ name }: { name: string }) => {
       if (name) {
-        store.commit('setUserName', { name });
+        store.setUserName({ name });
         await socket.emit('join-room', { name, roomId: room });
         currentUser.value = name;
         joined.value = true;
@@ -61,8 +60,8 @@ export default defineComponent({
     };
 
     const selectCard = (card: number) => {
-      if (store.state.user.card !== card) {
-        store.commit('setUserCard', { card });
+      if (store.user.card !== card) {
+        store.setUserCard({ card });
 
         socket.emit('select-card', {
           card: card,
@@ -70,7 +69,7 @@ export default defineComponent({
           userId: socket.id,
         });
       } else {
-        store.commit('setUserCard', { card: 0 });
+        store.setUserCard({ card: 0 });
 
         socket.emit('select-card', {
           card: 0,
@@ -94,7 +93,7 @@ export default defineComponent({
 
     const startOver = () => {
       socket.emit('start', { roomName: room });
-      store.commit('setUserCard', 0);
+      store.setUserCard({ card: 0 });
     };
 
     onMounted(async () => {
@@ -113,7 +112,7 @@ export default defineComponent({
 
       socket.on('user-joined', ({ usersInRoom, room }) => {
         users.value = usersInRoom;
-        store.commit('setRoom', room);
+        store.setRoom({ room });
       });
 
       socket.on('user-left', ({ usersInRoom }) => {
@@ -121,7 +120,7 @@ export default defineComponent({
       });
 
       socket.on('revealed', () => {
-        store.commit('showCards');
+        store.showCards();
       });
 
       socket.on('start-countdown', () => {
@@ -130,7 +129,7 @@ export default defineComponent({
 
       socket.on('started', ({ usersInRoom }: { usersInRoom: Array<User> }) => {
         users.value = usersInRoom;
-        store.commit('hideCards');
+        store.hideCards();
       });
     });
 
@@ -144,7 +143,7 @@ export default defineComponent({
       startOver,
       startCountdown: startCountdown,
       start,
-      hidden: computed(() => store.state.room.hidden),
+      hidden: computed(() => store.room.hidden),
     };
   },
 });

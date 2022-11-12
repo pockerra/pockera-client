@@ -16,7 +16,7 @@ import { computed, defineComponent } from 'vue';
 
 import fibonacci from '@/libs/fibonacci';
 import PokerCard from '@/components/PlayRoom/PokerCard.vue';
-import { useStore } from 'vuex';
+import { useStore } from '@/store/pinia';
 
 export default defineComponent({
   name: 'PokerCardList',
@@ -28,7 +28,7 @@ export default defineComponent({
 
     const store = useStore();
 
-    const selectedCard = computed<number>(() => store.state.user.card);
+    const selectedCard = computed<number>(() => store.user.card);
 
     return { fibonacci, onClick, selectedCard };
   },

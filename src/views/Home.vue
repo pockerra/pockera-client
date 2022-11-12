@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
 import SignUpRoom from '@/components/signup/SignUpRoom.vue';
 import randomString from '@/libs/randomString';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { useStore } from '@/store/pinia';
 import type { RoomName } from '@/types/global';
 
 export default defineComponent({
@@ -21,9 +21,9 @@ export default defineComponent({
 
     const onSubmit = ({ name }: { name: string }) => {
       const roomName: RoomName = randomString();
-      store.commit('setUserName', { name });
-      store.commit('setUserRoom', { room: roomName });
-      store.commit('setRoom', { name: roomName, hidden: true });
+      store.setUserName({ name });
+      store.setUserRoom({ room: roomName });
+      store.setRoom({ room: { name: roomName, hidden: true } });
 
       router.push(`/room/${roomName}`);
     };
