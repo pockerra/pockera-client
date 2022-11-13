@@ -21,6 +21,7 @@ export default defineComponent({
         if (number.value <= 0) {
           clearInterval(downloadTimer);
           emit('stopped');
+          number.value = 3;
         }
         number.value -= 1;
       }, 1000);
