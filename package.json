@@ -17,5 +17,10 @@
     "svelte-check": "^4.4.5",
     "typescript": "~5.9.3",
     "vite": "^8.0.1"
+  },
+  "dependencies": {
+    "lucide-svelte": "^1.0.1",
+    "socket.io-client": "^4.8.3",
+    "svelte-spa-router": "^5.0.0"
   }
 }
