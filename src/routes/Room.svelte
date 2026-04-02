@@ -25,8 +25,13 @@
 
   // Redirect if no room loaded
   $effect(() => {
+    
     if (!roomStore.room && roomId) {
-      push('/');
+      socketStore.emit('room:join', {
+        roomId,
+        displayName: userStore.name,
+        role: isFacilitator ? 'facilitator' : 'participant',
+      });
     }
   });
 

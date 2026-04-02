@@ -1,9 +1,9 @@
-import type { Role } from "../types/room";
+import type { Role } from '../types/room';
 
 function createUserStore() {
   let id = $state(crypto.randomUUID());
-  let name = $state(localStorage.getItem("pockerra_name") ?? "");
-  let role = $state<Role>("participant");
+  let name = $state(localStorage.getItem('pockerra_name') ?? '');
+  let role = $state<Role>('participant');
   let avatar = $state<string | undefined>(undefined);
 
   return {
@@ -18,7 +18,7 @@ function createUserStore() {
     },
     set name(v: string) {
       name = v;
-      localStorage.setItem("pockerra_name", v);
+      localStorage.setItem('pockerra_name', v);
     },
     get role() {
       return role;
@@ -36,8 +36,8 @@ function createUserStore() {
       return name.length > 0;
     },
     logout() {
-      name = "";
-      localStorage.removeItem("pockerra_name");
+      name = '';
+      localStorage.removeItem('pockerra_name');
     },
   };
 }

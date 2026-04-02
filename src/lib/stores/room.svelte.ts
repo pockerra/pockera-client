@@ -1,4 +1,4 @@
-import type { Player, Room, RoomSettings } from "../types/room";
+import type { Player, Room, RoomSettings } from '../types/room';
 
 const DEFAULT_SETTINGS: RoomSettings = {
   timerEnabled: false,

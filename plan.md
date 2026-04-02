@@ -121,9 +121,9 @@ src/
 ## Type Definitions
 
 ```typescript
-type Role = "facilitator" | "participant" | "spectator";
-type GamePhase = "waiting" | "voting" | "revealed";
-type DeckType = "fibonacci" | "tshirt" | "powers2" | "custom";
+type Role = 'facilitator' | 'participant' | 'spectator';
+type GamePhase = 'waiting' | 'voting' | 'revealed';
+type DeckType = 'fibonacci' | 'tshirt' | 'powers2' | 'custom';
 
 interface Player {
   id: string;

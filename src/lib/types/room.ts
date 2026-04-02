@@ -1,4 +1,4 @@
-import type { DeckType, GamePhase } from "./game";
+import type { DeckType, GamePhase } from './game';
 
 export interface RoomSettings {
   timerEnabled: boolean;
@@ -17,7 +17,7 @@ export interface Room {
   settings: RoomSettings;
 }
 
-export type Role = "facilitator" | "participant" | "spectator";
+export type Role = 'facilitator' | 'participant' | 'spectator';
 
 export interface Player {
   id: string;

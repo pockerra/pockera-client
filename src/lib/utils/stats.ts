@@ -1,8 +1,8 @@
-import type { Vote } from "../types/game";
+import type { Vote } from '../types/game';
 
 export function getNumericVotes(votes: Vote[]): number[] {
   return votes
-    .map((v) => (typeof v.value === "number" ? v.value : parseFloat(String(v.value))))
+    .map((v) => (typeof v.value === 'number' ? v.value : parseFloat(String(v.value))))
     .filter((n) => !isNaN(n));
 }
 

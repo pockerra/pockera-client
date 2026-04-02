@@ -1,4 +1,4 @@
-import type { Role } from "./room";
+import type { Role } from './room';
 
 export interface User {
   id: string;

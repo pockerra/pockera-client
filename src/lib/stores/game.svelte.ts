@@ -1,12 +1,12 @@
-import type { GamePhase, Vote, Story, DeckType } from "../types/game";
-import { getDeck } from "../utils/decks";
+import type { GamePhase, Vote, Story, DeckType } from '../types/game';
+import { getDeck } from '../utils/decks';
 
 function createGameStore() {
-  let phase = $state<GamePhase>("waiting");
+  let phase = $state<GamePhase>('waiting');
   let votes = $state<Vote[]>([]);
   let stories = $state<Story[]>([]);
   let currentStoryId = $state<string | null>(null);
-  let deckType = $state<DeckType>("fibonacci");
+  let deckType = $state<DeckType>('fibonacci');
   let selectedCard = $state<string | number | null>(null);
 
   const deck = $derived(getDeck(deckType));
@@ -62,7 +62,7 @@ function createGameStore() {
     resetVotes() {
       votes = [];
       selectedCard = null;
-      phase = "voting";
+      phase = 'voting';
     },
     addStory(story: Story) {
       stories = [...stories, story];
