@@ -1,5 +1,7 @@
 <script lang="ts">
   import { gameStore } from '../../stores/game.svelte';
+  import { roomStore } from '../../stores/room.svelte';
+  import { socketStore } from '../../stores/socket.svelte';
   import StoryItem from './StoryItem.svelte';
   import Button from '../ui/Button.svelte';
   import Input from '../ui/Input.svelte';
@@ -9,19 +11,22 @@
 
   function addStory() {
     if (!newStoryTitle.trim()) return;
-    gameStore.addStory({
-      id: crypto.randomUUID(),
-      title: newStoryTitle.trim(),
-    });
+    const roomId = roomStore.room?.id;
+    if (!roomId) return;
+    socketStore.emit('story:add', { roomId, title: newStoryTitle.trim() });
     newStoryTitle = '';
   }
 
   function selectStory(storyId: string) {
-    gameStore.currentStoryId = storyId;
+    const roomId = roomStore.room?.id;
+    if (!roomId) return;
+    socketStore.emit('story:select', { roomId, storyId });
   }
 
   function deleteStory(storyId: string) {
-    gameStore.removeStory(storyId);
+    const roomId = roomStore.room?.id;
+    if (!roomId) return;
+    socketStore.emit('story:delete', { roomId, storyId });
   }
 
   function handleKeydown(e: KeyboardEvent) {

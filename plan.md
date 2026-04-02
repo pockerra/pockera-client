@@ -1,6 +1,7 @@
 # Pockera — Planning Poker App (Frontend)
 
 ## Context
+
 Build a Planning Poker web app similar to planningpokeronline.com. This repo is **frontend only** (Svelte 5 + Vite + TypeScript). The backend will be a separate project communicating via REST API + WebSocket.
 use context7 to get latest docs of vite+ svelte and other documentations 
 ---
@@ -201,3 +202,4 @@ interface RoomSettings { timerEnabled: boolean; timerDuration: number; autoRevea
 3. **Mobile testing**: Browser dev tools responsive mode
 4. **Type checking**: `pnpm check` — ensure no TypeScript errors
 5. **Manual flow**: Create room → share link → join in another tab → vote → reveal → next story → export
+TypeScript backend code and replace with Rust implementation plan

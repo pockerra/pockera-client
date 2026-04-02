@@ -8,6 +8,7 @@ function createUserStore() {
 
   return {
     get id() { return id; },
+    set id(v: string) { id = v; },
     get name() { return name; },
     set name(v: string) {
       name = v;

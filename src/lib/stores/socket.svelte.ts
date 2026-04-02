@@ -1,6 +1,7 @@
 import { io, type Socket } from 'socket.io-client';
 import { roomStore } from './room.svelte';
 import { gameStore } from './game.svelte';
+import { userStore } from './user.svelte';
 import type {
   RoomStatePayload,
   RoomJoinedPayload,
@@ -52,6 +53,13 @@ function createSocketStore() {
       if (data.currentStory) gameStore.currentStoryId = data.currentStory.id;
       gameStore.phase = data.room.phase;
       gameStore.deckType = data.room.deckType;
+
+      // Sync local user ID with backend-assigned player ID
+      const me = data.players.find((p) => p.name === userStore.name);
+      if (me) {
+        userStore.id = me.id;
+        userStore.role = me.role;
+      }
     });
 
     s.on('room:joined', (data: RoomJoinedPayload) => {

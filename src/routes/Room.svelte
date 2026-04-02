@@ -11,6 +11,7 @@
   import { gameStore } from '../lib/stores/game.svelte';
   import { roomStore } from '../lib/stores/room.svelte';
   import { userStore } from '../lib/stores/user.svelte';
+  import { socketStore } from '../lib/stores/socket.svelte';
   import { Eye, EyeOff, RotateCcw } from 'lucide-svelte';
 
   interface Props {
@@ -25,28 +26,20 @@
   // Redirect if no room loaded
   $effect(() => {
     if (!roomStore.room && roomId) {
-      // In Phase 3 this would fetch from backend
-      // For now redirect to home if no room state
       push('/');
     }
   });
 
   function handleVoteSelect(value: string | number) {
-    gameStore.submitVote(userStore.id, value);
-    roomStore.setPlayerVoted(userStore.id);
+    socketStore.emit('vote:submit', { roomId, value });
   }
 
   function revealVotes() {
-    gameStore.phase = 'revealed';
-    // Mock: reveal mock player votes
-    if (!gameStore.votes.find((v) => v.playerId === 'mock-1')) {
-      gameStore.submitVote('mock-1', 5);
-    }
+    socketStore.emit('vote:reveal', { roomId });
   }
 
   function resetVotes() {
-    gameStore.resetVotes();
-    roomStore.resetPlayerVotes();
+    socketStore.emit('vote:reset', { roomId });
   }
 </script>
 

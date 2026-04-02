@@ -5,7 +5,7 @@
   import Switch from '../lib/components/ui/Switch.svelte';
   import Modal from '../lib/components/ui/Modal.svelte';
   import { userStore } from '../lib/stores/user.svelte';
-  import { gameStore } from '../lib/stores/game.svelte';
+  import { socketStore } from '../lib/stores/socket.svelte';
   import { roomStore } from '../lib/stores/room.svelte';
   import { DECKS } from '../lib/utils/decks';
   import type { DeckType } from '../lib/types/game';
@@ -29,33 +29,30 @@
 
     userStore.name = playerName.trim();
 
-    // Generate mock room (Phase 2 — no backend yet)
-    const roomId = crypto.randomUUID().slice(0, 8);
-    roomStore.room = {
-      id: roomId,
-      deckType: selectedDeck,
-      deck: DECKS[selectedDeck].values,
-      facilitatorId: userStore.id,
-      phase: 'voting',
-      settings,
-    };
-    gameStore.deckType = selectedDeck;
-    gameStore.phase = 'voting';
+    // Connect to backend and create room via WebSocket
+    socketStore.connect();
 
-    // Add self as facilitator
-    roomStore.players = [
-      { id: userStore.id, name: userStore.name, role: 'facilitator', hasVoted: false },
-    ];
+    // Wait for connection, then emit room:create
+    const checkConnection = setInterval(() => {
+      if (socketStore.connected) {
+        clearInterval(checkConnection);
+        socketStore.emit('room:create', {
+          deckType: selectedDeck,
+          settings,
+          displayName: userStore.name,
+        });
 
-    // Add mock players for demo
-    roomStore.players = [
-      ...roomStore.players,
-      { id: 'mock-1', name: 'Alice', role: 'participant', hasVoted: true },
-      { id: 'mock-2', name: 'Bob', role: 'participant', hasVoted: false },
-      { id: 'mock-3', name: 'Charlie', role: 'spectator', hasVoted: false },
-    ];
-
-    push(`/room/${roomId}`);
+        // Listen for room:state to get the room ID and navigate
+        // The socket store already handles room:state events
+        // We just need to wait for roomStore.room to be set
+        const checkRoom = setInterval(() => {
+          if (roomStore.room) {
+            clearInterval(checkRoom);
+            push(`/room/${roomStore.room.id}`);
+          }
+        }, 50);
+      }
+    }, 50);
   }
 </script>
 

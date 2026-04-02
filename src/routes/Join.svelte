@@ -3,8 +3,7 @@
   import DisplayNameForm from '../lib/components/auth/DisplayNameForm.svelte';
   import { userStore } from '../lib/stores/user.svelte';
   import { roomStore } from '../lib/stores/room.svelte';
-  import { gameStore } from '../lib/stores/game.svelte';
-  import { DECKS } from '../lib/utils/decks';
+  import { socketStore } from '../lib/stores/socket.svelte';
 
   interface Props {
     params?: { id?: string };
@@ -16,30 +15,25 @@
   function handleJoin(name: string) {
     userStore.name = name;
 
-    // Mock: create room state as if joining (Phase 2)
-    roomStore.room = {
-      id: roomId,
-      deckType: 'fibonacci',
-      deck: DECKS.fibonacci.values,
-      facilitatorId: 'host-id',
-      phase: 'voting',
-      settings: {
-        timerEnabled: false,
-        timerDuration: 60,
-        autoReveal: false,
-        allowSpectators: true,
-      },
-    };
+    socketStore.connect();
 
-    gameStore.deckType = 'fibonacci';
-    gameStore.phase = 'voting';
+    const checkConnection = setInterval(() => {
+      if (socketStore.connected) {
+        clearInterval(checkConnection);
+        socketStore.emit('room:join', {
+          roomId,
+          displayName: userStore.name,
+          role: 'participant',
+        });
 
-    roomStore.players = [
-      { id: 'host-id', name: 'Host', role: 'facilitator', hasVoted: false },
-      { id: userStore.id, name: userStore.name, role: 'participant', hasVoted: false },
-    ];
-
-    push(`/room/${roomId}`);
+        const checkRoom = setInterval(() => {
+          if (roomStore.room) {
+            clearInterval(checkRoom);
+            push(`/room/${roomId}`);
+          }
+        }, 50);
+      }
+    }, 50);
   }
 </script>
 
