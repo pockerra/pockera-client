@@ -23,14 +23,19 @@
   const roomId = $derived(params?.id ?? '');
   const isFacilitator = $derived(roomStore.room?.facilitatorId === userStore.id);
 
-  // Redirect if no room loaded
+  // Reconnect and rejoin room if state was lost (e.g. page refresh)
   $effect(() => {
-    
-    if (!roomStore.room && roomId) {
+    const isConnected = socketStore.connected;
+
+    if (!roomStore.room && roomId && userStore.isLoggedIn) {
+      if (!isConnected) {
+        socketStore.connect();
+        return; // effect re-runs when connected changes
+      }
       socketStore.emit('room:join', {
         roomId,
         displayName: userStore.name,
-        role: isFacilitator ? 'facilitator' : 'participant',
+        role: userStore.role,
       });
     }
   });

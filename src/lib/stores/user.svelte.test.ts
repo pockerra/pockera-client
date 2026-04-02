@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vite-plus/test";
 
+const STORAGE_KEY = "pockerra_user";
+
 // Mock localStorage before importing the store
 const storage = new Map<string, string>();
 vi.stubGlobal("localStorage", {
@@ -37,17 +39,47 @@ describe("userStore initial state", () => {
   });
 });
 
-describe("userStore.name", () => {
-  it("persists name to localStorage", () => {
+describe("userStore persistence", () => {
+  it("persists all fields to localStorage", () => {
     userStore.name = "Alice";
-    expect(storage.get("pockerra_name")).toBe("Alice");
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.name).toBe("Alice");
+    expect(stored.id).toBe(userStore.id);
+    expect(stored.role).toBe("participant");
   });
 
-  it("reads name from localStorage on creation", async () => {
-    storage.set("pockerra_name", "Bob");
+  it("persists id to localStorage", () => {
+    const id = userStore.id;
+    userStore.name = "Alice";
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.id).toBe(id);
+  });
+
+  it("persists role to localStorage", () => {
+    userStore.role = "facilitator";
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.role).toBe("facilitator");
+  });
+
+  it("persists avatar to localStorage", () => {
+    userStore.avatar = "avatar.png";
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.avatar).toBe("avatar.png");
+  });
+
+  it("reads all fields from localStorage on creation", async () => {
+    storage.set(STORAGE_KEY, JSON.stringify({
+      id: "stored-id",
+      name: "Bob",
+      role: "facilitator",
+      avatar: "bob.png",
+    }));
     vi.resetModules();
     const mod = await import("./user.svelte");
     expect(mod.userStore.name).toBe("Bob");
+    expect(mod.userStore.id).toBe("stored-id");
+    expect(mod.userStore.role).toBe("facilitator");
+    expect(mod.userStore.avatar).toBe("bob.png");
   });
 });
 
@@ -63,27 +95,37 @@ describe("userStore.isLoggedIn", () => {
 });
 
 describe("userStore.logout", () => {
-  it("clears name and removes from localStorage", () => {
+  it("clears all fields and removes from localStorage", () => {
     userStore.name = "Alice";
+    userStore.role = "facilitator";
+    userStore.avatar = "alice.png";
     userStore.logout();
     expect(userStore.name).toBe("");
-    expect(storage.has("pockerra_name")).toBe(false);
+    expect(userStore.role).toBe("participant");
+    expect(userStore.avatar).toBeUndefined();
+    expect(storage.has(STORAGE_KEY)).toBe(false);
   });
 });
 
 describe("userStore setters", () => {
-  it("sets id", () => {
+  it("sets id and persists", () => {
     userStore.id = "custom-id";
     expect(userStore.id).toBe("custom-id");
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.id).toBe("custom-id");
   });
 
-  it("sets role", () => {
+  it("sets role and persists", () => {
     userStore.role = "facilitator";
     expect(userStore.role).toBe("facilitator");
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.role).toBe("facilitator");
   });
 
-  it("sets avatar", () => {
+  it("sets avatar and persists", () => {
     userStore.avatar = "avatar.png";
     expect(userStore.avatar).toBe("avatar.png");
+    const stored = JSON.parse(storage.get(STORAGE_KEY)!);
+    expect(stored.avatar).toBe("avatar.png");
   });
 });
