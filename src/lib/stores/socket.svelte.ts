@@ -25,7 +25,7 @@ function createSocketStore() {
   let error = $state<string | null>(null);
 
   function connect() {
-    if (socket?.connected) return;
+    if (socket) return;
 
     const s = io(SERVER_URL, { transports: ['websocket', 'polling'] });
 

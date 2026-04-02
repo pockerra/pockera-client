@@ -23,21 +23,27 @@
   const roomId = $derived(params?.id ?? '');
   const isFacilitator = $derived(roomStore.room?.facilitatorId === userStore.id);
 
+  let joinAttempted = false;
+
   // Reconnect and rejoin room if state was lost (e.g. page refresh)
   $effect(() => {
     const isConnected = socketStore.connected;
+    const hasRoom = !!roomStore.room;
 
-    if (!roomStore.room && roomId && userStore.isLoggedIn) {
-      if (!isConnected) {
-        socketStore.connect();
-        return; // effect re-runs when connected changes
-      }
-      socketStore.emit('room:join', {
-        roomId,
-        displayName: userStore.name,
-        role: userStore.role,
-      });
+    if (hasRoom || joinAttempted || !roomId || !userStore.isLoggedIn) return;
+
+    if (!isConnected) {
+      socketStore.connect();
+      return;
     }
+
+    joinAttempted = true;
+    socketStore.emit('room:join', {
+      roomId,
+      displayName: userStore.name,
+      role: userStore.role,
+      playerId: userStore.id,
+    });
   });
 
   function handleVoteSelect(value: string | number) {
