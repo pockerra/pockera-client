@@ -124,6 +124,12 @@
   <aside class="story-sidebar">
     <StoryPanel />
   </aside>
+{:else if socketStore.error}
+  <div class="not-found">
+    <h2>Room not found</h2>
+    <p>This room doesn't exist or has been closed.</p>
+    <Button onclick={() => push('/')}>Go Home</Button>
+  </div>
 {:else}
   <div class="loading">Loading room...</div>
 {/if}
@@ -207,13 +213,28 @@
     overflow-y: auto;
   }
 
-  .loading {
+  .loading,
+  .not-found {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     color: var(--color-text-secondary);
     font-size: 1rem;
+  }
+
+  .not-found {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .not-found h2 {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .not-found p {
+    margin: 0;
   }
 
   @media (max-width: 1024px) {

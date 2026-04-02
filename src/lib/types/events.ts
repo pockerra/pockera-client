@@ -84,6 +84,7 @@ export interface RoomStatePayload {
   players: Player[];
   stories: Story[];
   currentStory?: Story;
+  votes: { playerId: string; value: string | number }[];
 }
 
 export interface RoomJoinedPayload {

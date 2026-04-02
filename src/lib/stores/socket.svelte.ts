@@ -53,12 +53,22 @@ function createSocketStore() {
       if (data.currentStory) gameStore.currentStoryId = data.currentStory.id;
       gameStore.phase = data.room.phase;
       gameStore.deckType = data.room.deckType;
+      const votes = data.votes ?? [];
+      gameStore.votes = votes;
 
       // Sync local user ID with backend-assigned player ID
       const me = data.players.find((p) => p.name === userStore.name);
       if (me) {
         userStore.id = me.id;
         userStore.role = me.role;
+
+        // Restore selected card from votes
+        const myVote = votes.find((v) => v.playerId === me.id);
+        if (myVote) {
+          // Normalize: deck values can be number or string, ensure type matches
+          const deckValue = gameStore.deck.find((v) => String(v) === String(myVote.value));
+          gameStore.selectedCard = deckValue ?? myVote.value;
+        }
       }
     });
 
