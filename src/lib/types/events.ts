@@ -1,6 +1,6 @@
-import type { DeckType } from './game';
-import type { Player, Role, RoomSettings } from './room';
-import type { Story } from './game';
+import type { DeckType } from "./game";
+import type { Player, Role, RoomSettings } from "./room";
+import type { Story } from "./game";
 
 // Client → Server
 export interface RoomCreatePayload {
@@ -80,7 +80,7 @@ export interface PlayerKickPayload {
 
 // Server → Client
 export interface RoomStatePayload {
-  room: import('./room').Room;
+  room: import("./room").Room;
   players: Player[];
   stories: Story[];
   currentStory?: Story;

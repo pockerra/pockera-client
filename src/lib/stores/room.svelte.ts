@@ -1,4 +1,4 @@
-import type { Player, Room, RoomSettings } from '../types/room';
+import type { Player, Room, RoomSettings } from "../types/room";
 
 const DEFAULT_SETTINGS: RoomSettings = {
   timerEnabled: false,
@@ -13,13 +13,27 @@ function createRoomStore() {
   let connected = $state(false);
 
   return {
-    get room() { return room; },
-    set room(v: Room | null) { room = v; },
-    get players() { return players; },
-    set players(v: Player[]) { players = v; },
-    get connected() { return connected; },
-    set connected(v: boolean) { connected = v; },
-    get settings() { return room?.settings ?? DEFAULT_SETTINGS; },
+    get room() {
+      return room;
+    },
+    set room(v: Room | null) {
+      room = v;
+    },
+    get players() {
+      return players;
+    },
+    set players(v: Player[]) {
+      players = v;
+    },
+    get connected() {
+      return connected;
+    },
+    set connected(v: boolean) {
+      connected = v;
+    },
+    get settings() {
+      return room?.settings ?? DEFAULT_SETTINGS;
+    },
 
     addPlayer(player: Player) {
       if (!players.find((p) => p.id === player.id)) {
@@ -33,9 +47,7 @@ function createRoomStore() {
       players = players.map((p) => (p.id === player.id ? player : p));
     },
     setPlayerVoted(playerId: string) {
-      players = players.map((p) =>
-        p.id === playerId ? { ...p, hasVoted: true } : p
-      );
+      players = players.map((p) => (p.id === playerId ? { ...p, hasVoted: true } : p));
     },
     resetPlayerVotes() {
       players = players.map((p) => ({ ...p, hasVoted: false }));

@@ -1,7 +1,7 @@
-import { io, type Socket } from 'socket.io-client';
-import { roomStore } from './room.svelte';
-import { gameStore } from './game.svelte';
-import { userStore } from './user.svelte';
+import { io, type Socket } from "socket.io-client";
+import { roomStore } from "./room.svelte";
+import { gameStore } from "./game.svelte";
+import { userStore } from "./user.svelte";
 import type {
   RoomStatePayload,
   RoomJoinedPayload,
@@ -15,9 +15,9 @@ import type {
   TimerTickPayload,
   PlayerUpdatedPayload,
   ErrorPayload,
-} from '../types/events';
+} from "../types/events";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3000';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL ?? "http://localhost:3000";
 
 function createSocketStore() {
   let socket = $state<Socket | null>(null);
@@ -27,26 +27,26 @@ function createSocketStore() {
   function connect() {
     if (socket?.connected) return;
 
-    const s = io(SERVER_URL, { transports: ['websocket', 'polling'] });
+    const s = io(SERVER_URL, { transports: ["websocket", "polling"] });
 
-    s.on('connect', () => {
+    s.on("connect", () => {
       connected = true;
       roomStore.connected = true;
       error = null;
     });
 
-    s.on('disconnect', () => {
+    s.on("disconnect", () => {
       connected = false;
       roomStore.connected = false;
     });
 
-    s.on('connect_error', (err) => {
+    s.on("connect_error", (err) => {
       error = err.message;
       connected = false;
     });
 
     // Room events
-    s.on('room:state', (data: RoomStatePayload) => {
+    s.on("room:state", (data: RoomStatePayload) => {
       roomStore.room = data.room;
       roomStore.players = data.players;
       gameStore.stories = data.stories;
@@ -62,63 +62,61 @@ function createSocketStore() {
       }
     });
 
-    s.on('room:joined', (data: RoomJoinedPayload) => {
+    s.on("room:joined", (data: RoomJoinedPayload) => {
       roomStore.addPlayer(data.player);
     });
 
-    s.on('room:left', (data: RoomLeftPayload) => {
+    s.on("room:left", (data: RoomLeftPayload) => {
       roomStore.removePlayer(data.playerId);
     });
 
     // Vote events
-    s.on('vote:submitted', (data: VoteSubmittedPayload) => {
+    s.on("vote:submitted", (data: VoteSubmittedPayload) => {
       roomStore.setPlayerVoted(data.playerId);
     });
 
-    s.on('vote:revealed', (data: VoteRevealedPayload) => {
+    s.on("vote:revealed", (data: VoteRevealedPayload) => {
       gameStore.votes = data.votes;
-      gameStore.phase = 'revealed';
+      gameStore.phase = "revealed";
     });
 
-    s.on('vote:reset', () => {
+    s.on("vote:reset", () => {
       gameStore.resetVotes();
       roomStore.resetPlayerVotes();
     });
 
     // Story events
-    s.on('story:added', (data: StoryAddedPayload) => {
+    s.on("story:added", (data: StoryAddedPayload) => {
       gameStore.addStory(data.story);
     });
 
-    s.on('story:selected', (data: StorySelectedPayload) => {
+    s.on("story:selected", (data: StorySelectedPayload) => {
       gameStore.currentStoryId = data.storyId;
     });
 
-    s.on('story:updated', (data: StoryUpdatedPayload) => {
-      gameStore.stories = gameStore.stories.map((s) =>
-        s.id === data.story.id ? data.story : s
-      );
+    s.on("story:updated", (data: StoryUpdatedPayload) => {
+      gameStore.stories = gameStore.stories.map((s) => (s.id === data.story.id ? data.story : s));
     });
 
-    s.on('story:deleted', (data: StoryDeletedPayload) => {
+    s.on("story:deleted", (data: StoryDeletedPayload) => {
       gameStore.removeStory(data.storyId);
     });
 
     // Timer events
-    s.on('timer:tick', (_data: TimerTickPayload) => {
+    s.on("timer:tick", (_data: TimerTickPayload) => {
       // Timer component handles this via its own state
     });
 
-    s.on('timer:expired', () => {
+    s.on("timer:expired", () => {
       // Could auto-reveal based on settings
     });
 
     // Player events
-    s.on('player:updated', (data: PlayerUpdatedPayload) => {
+    s.on("player:updated", (data: PlayerUpdatedPayload) => {
       roomStore.updatePlayer(data.player);
     });
 
-    s.on('error', (data: ErrorPayload) => {
+    s.on("error", (data: ErrorPayload) => {
       error = data.message;
     });
 
@@ -137,8 +135,12 @@ function createSocketStore() {
   }
 
   return {
-    get connected() { return connected; },
-    get error() { return error; },
+    get connected() {
+      return connected;
+    },
+    get error() {
+      return error;
+    },
     connect,
     disconnect,
     emit,
