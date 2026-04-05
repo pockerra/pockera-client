@@ -1,8 +1,6 @@
 <script lang="ts">
   import { userStore } from '../../stores/user.svelte';
   import Avatar from '../ui/Avatar.svelte';
-  import { Spade } from 'lucide-svelte';
-
   interface Props {
     showUser?: boolean;
   }
@@ -12,7 +10,7 @@
 
 <header class="header">
   <a href="#/" class="logo">
-    <Spade size={24} />
+    <img src="/Logo.svg" alt="Pockerra" class="logo-icon" />
     <span>Pockerra</span>
   </a>
 
@@ -48,8 +46,9 @@
     letter-spacing: -0.02em;
   }
 
-  .logo :global(svg) {
-    color: var(--color-primary);
+  .logo-icon {
+    width: 24px;
+    height: 24px;
   }
 
   .user-info {

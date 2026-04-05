@@ -10,7 +10,7 @@
   import { DECKS } from '../lib/utils/decks';
   import type { DeckType } from '../lib/types/game';
   import type { RoomSettings } from '../lib/types/room';
-  import { Spade, Users, Zap, Shield, ArrowRight } from 'lucide-svelte';
+  import { Users, Zap, Shield, ArrowRight } from 'lucide-svelte';
 
   let showCreateModal = $state(false);
   let playerName = $state(userStore.name);
@@ -59,7 +59,7 @@
 <div class="home">
   <section class="hero">
     <div class="hero-icon">
-      <Spade size={48} />
+      <img src="/Logo.svg" alt="Pockerra" width="48" height="48" />
     </div>
     <h1>Pockerra</h1>
     <p class="hero-subtitle">Fast, real-time planning poker for agile teams</p>
